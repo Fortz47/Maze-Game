@@ -44,7 +44,7 @@ Atuokwu A. Fortune [Email](atuokwu.fortune@gmail.com) - [Github](https://github.
 
 ## Contributions
 Contributions to the project are welcome. If you find any bugs or have suggestions for improvements, feel free to open an issue or submit a pull request.
-It is still very much a work in progress, more features will be added.
+It is still much a work in progress, more features will be added.
 
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
