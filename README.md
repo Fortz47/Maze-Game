@@ -4,8 +4,7 @@
 This is a maze game implemented in C using the SDL2 library with raycasting techniques for rendering. The game features a maze environment where players navigate through corridors, avoiding collisions with walls. The game utilizes raycasting to simulate a 3D perspective, projecting walls, ceilings, and floors onto a 2D screen.
 
 ## Features
-- **Maze navigation:** Players can move through the maze using keyboard controls (WASD keys).
-- **Camera control:** Players can adjust view angle using left and right direction key buttons.
+- **Maze navigation:** Players can move through the maze using keyboard controls.
 - **Raycasting rendering:** Walls, ceilings, and floors are rendered using raycasting techniques to create a pseudo-3D effect.
 - **Collision detection:** Players cannot move through walls; collision detection prevents them from passing through obstacles.
 - **Map generation:** The game includes a map generation feature to create random maze layouts for dynamic gameplay.
@@ -23,7 +22,7 @@ This is a maze game implemented in C using the SDL2 library with raycasting tech
     ```
     gcc .\src\*.c .\headers\maze.h -o app -I./SDL2/include/SDL2 -L./SDL2/lib/ -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
     ```
-    Note that this is the compilation flags for MinGW in windows
+    Note that this is the compilation flags for MinGW on windows
 
 5. Run the compiled executable:
     ```
@@ -41,7 +40,7 @@ This is a maze game implemented in C using the SDL2 library with raycasting tech
 - Navigate carefully through the maze to find the exit as quickly as possible.
 
 ## Authors
-Atuokwu A. Fortune [Email](atuokwu.fortune@gmail.com) [Github](https://github.com/Fortz47) [Linkden]()
+Atuokwu A. Fortune [Email](atuokwu.fortune@gmail.com) - [Github](https://github.com/Fortz47) - [Linkden](https://www.linkedin.com/in/fortune-atuokwu-427213186/)
 
 ## Contributions
 Contributions to the project are welcome. If you find any bugs or have suggestions for improvements, feel free to open an issue or submit a pull request.
