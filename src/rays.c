@@ -1,4 +1,5 @@
 #include "../headers/maze.h"
+#include <limits.h>
 
 /**
  * cast_rays - cast rays in map
@@ -20,11 +21,13 @@ void cast_rays(SDL_Instance instance, Player player, Ray *rays, const int map[ma
 	SDL_Point Y_quad = {0, 0};
 	SDL_Point end = {0, 0};
 
-	for (i = 0; i < NUM_RAYS; i++)
+	for (i = 0; i <= NUM_RAYS; i++)
 	{
-		angle = player.angle - 33 + (FOV * i);
+		angle = player.angle - 30 + (FOV * i);
 		if (angle < 0)
 			angle += 360;
+		else if (angle > 360)
+			angle -= 360;
 		rays[i].angle = angle;
 		rays[i].start.x = player.pos.x;
 		rays[i].start.y = player.pos.y;
@@ -43,7 +46,7 @@ void cast_rays(SDL_Instance instance, Player player, Ray *rays, const int map[ma
 			dirX = (angle == 270) ? 0 : -1;
 			dirY = -1;
 		}
-		else if (angle > 270 && angle < 360)
+		else if (angle > 270 && angle <= 360)
 		{
 			dirX = 1;
 			dirY = -1;
@@ -54,13 +57,13 @@ void cast_rays(SDL_Instance instance, Player player, Ray *rays, const int map[ma
 		mY = 1 / mX;
 		if (angle == 90 || angle == 270)
 		{
-			kx = INFINITY;
+			kx = 1e30;
 			ky = 0.0;
 			mY = 0;
 		}
 		else if (angle == 0 || angle == 180)
 		{
-			ky = INFINITY;
+			ky = 1e30;
 			kx = 0.0;
 		}
 		else
@@ -76,18 +79,24 @@ void cast_rays(SDL_Instance instance, Player player, Ray *rays, const int map[ma
 		bool inMapY = true;
 		int px = 0, py = 0;
 		/* initial distance to horizontal grid*/
-		cx = (x1 % CC == 0) ? CC : (CC - (x1 % CC));
+		if (x1 % CC == 0)
+			cx = CC;
+		else
+			cx = (dirX > 0) ? CC - (x1 % CC) : x1 % CC;
 		/* initial distance to vertical grid*/
-		cy = (y1 % CC == 0) ? CC : (CC - (y1 % CC));
+		if (y1 % CC == 0)
+			cy = CC;
+		else
+			cy = (dirY > 0) ? CC - (y1 % CC) : y1 % CC;
 		while (true)
 		{
 			/* displacement along x-axis */
 			if (kx <= ky && inMapX && wallHitX == false && !(angle == 90 || angle == 270))
 			{
-				dx += cx * dirX;
+				dx += cx;
 				cx = CC;
-				x2 = x1 + dx;
-				y2 = (mX * _abs(dx)) * dirY + y1;
+				x2 = x1 + dx * dirX;
+				y2 = (mX * dx) * dirY + y1;
 				kx = cal_R(x1, x2, y1, y2);
 				if (x2 > 0 && x2 < mapW * CC && y2 > 0 && y2 < mapH * CC)
 				{
@@ -102,7 +111,6 @@ void cast_rays(SDL_Instance instance, Player player, Ray *rays, const int map[ma
 							end.x = (kx < ky) ? X_quad.x : Y_quad.x;
 							end.y = (kx < ky) ? X_quad.y : Y_quad.y;
 							k = (kx < ky) ? kx : ky;
-							rays[i].color = (kx < ky) ? 128 : 211;
 							break;
 						}
 					}
@@ -110,16 +118,16 @@ void cast_rays(SDL_Instance instance, Player player, Ray *rays, const int map[ma
 				else
 				{
 					inMapX = false;
-					kx = INFINITY; /* out of bounds */
+					kx = 1e30; /* out of bounds */
 				}
 			}
 			else if (ky <= kx && inMapY && wallHitY == false && !(angle == 180 || angle == 0))
 			{
 				/* displacement along y-axis */
-				dy += cy * dirY;
+				dy += cy;
 				cy = CC;
-				y2 = y1 + dy;
-				x2 = (_abs(dy) * mY) * dirX + x1;
+				y2 = y1 + dy * dirY;
+				x2 = (dy * mY) * dirX + x1;
 				ky = cal_R(x1, x2, y1, y2);
 				if (y2 > 0 && y2 < mapH * CC && x2 > 0 && x2 < mapW * CC)
 				{
@@ -134,7 +142,6 @@ void cast_rays(SDL_Instance instance, Player player, Ray *rays, const int map[ma
 							end.x = (kx < ky) ? X_quad.x : Y_quad.x;
 							end.y = (kx < ky) ? X_quad.y : Y_quad.y;
 							k = (kx < ky) ? kx : ky;
-							rays[i].color = (kx < ky) ? 128 : 211;
 							break;
 						}
 					}
@@ -142,7 +149,7 @@ void cast_rays(SDL_Instance instance, Player player, Ray *rays, const int map[ma
 				else
 				{
 					inMapY = false;
-					ky = INFINITY; /* out of bounds */
+					ky = 1e30; /* out of bounds */
 				}
 			}
 			else
@@ -168,16 +175,9 @@ void cast_rays(SDL_Instance instance, Player player, Ray *rays, const int map[ma
 			rays[i].end.x = end.x;
 			rays[i].end.y = end.y;
 			rays[i].actualLength = k;
+			rays[i].color = (kx < ky) ? 128 : 211;
 		}
-
-		// SDL_SetRenderDrawColor(instance.renderer, 255, 225, 255, 255);
 		SDL_RenderDrawLine(instance.renderer, rays[i].start.x, rays[i].start.y, rays[i].end.x, rays[i].end.y);
-		// SDL_SetRenderDrawBlendMode(instance.renderer, SDL_BLENDMODE_BLEND);
-		// SDL_SetRenderDrawColor(instance.renderer, 255, 0, 0, 80);
-		// SDL_RenderDrawLine(instance.renderer, i * CC, 0, CC * i, mapH * CC);
-		// SDL_SetRenderDrawBlendMode(instance.renderer, SDL_BLENDMODE_BLEND);
-		// SDL_SetRenderDrawColor(instance.renderer, 0, 255, 0, 80);
-		// SDL_RenderDrawLine(instance.renderer, 0, i * CC, CC * mapW, CC * i);
 	}
 }
 
@@ -200,7 +200,7 @@ void castWall(SDL_Instance *instance, Ray *rays, Player player)
 	{
 		angle = rays[i].angle;
 		angle = _absf(angle - player.angle);
-		rays[i].correctedlength = rays[i].actualLength * cos(angle * (M_PI / 180));
+		rays[i].correctedlength = rays[i].actualLength * cos(rad(angle));
 		ds_to_wall = rays[i].correctedlength;
 		proj_wall_h = (wH / ds_to_wall) * ds_to_plane;
 		wallTop = (SCREEN_HEIGHT - proj_wall_h) / 2;
@@ -240,10 +240,113 @@ void castCeiling(SDL_Instance instance, Ray *rays)
 {
 	float dy = 0;
 
-	SDL_SetRenderDrawColor(instance.renderer, 0, 0, 255, 255);
+	SDL_SetRenderDrawColor(instance.renderer, 135, 206, 235, 255);
 	for (int i = 0; i < NUM_RAYS; i++)
 	{
 		dy = rays[i].ds_to_proj_wall_top;
 		SDL_RenderDrawLine(instance.renderer, i, dy, i, 0);
 	}
 }
+
+
+/**
+ * setupRay - setup ray
+ * @angle: angle of ray
+ * 
+ * Return: singleRay structure
+*/
+singleRay setupRay(float angle)
+{
+	singleRay ray;
+	
+	
+	if (angle < 0)
+		angle += 360;
+	else if (angle > 360)
+		angle -= 360;
+	
+	ray.angle = angle;
+	ray.dir = getDir(angle);
+
+	return (ray);
+}
+
+
+/**
+ * cast_rays - cast rays in map
+ * @instance: SDL_Instance structure
+ * @player: player structure
+ * @rays: array of rays
+ * @map: 2D array of map
+ * 
+*/
+
+/***
+void cast_rays(SDL_Instance instance, Player player, Ray *rays, const int map[mapH][mapW])
+{
+	singleRay ray;
+	float angle = 0.0;
+	int i;
+	SDL_Point offset = {0, 0};
+	int x1 = 0, x2 = 0, y1 = 0, y2 = 0;
+	float mX = 0.0, mY = 0.0;
+	double rayDist_x = 0.0;
+	double rayDist_y = 0.0;
+	bool wallHit = false;
+	int side;
+
+	for (i = 0; i <= NUM_RAYS; i++)
+	{
+		angle = player.angle - 33 + (FOV * i);
+		ray = setupRay(angle);
+		rays[i].start.x = player.pos.x;
+		rays[i].start.y = player.pos.y;
+		rays[i].angle = ray.angle;
+		x1 = rays[i].start.x;
+		y1 = rays[i].start.y;
+		offset = get_Offset(ray, x1, y1);
+		mX = _absf(tan(rad(ray.angle)));
+		mY = 1 / mX;
+		rayDist_x = (angle == 90) ? 1e30 : cal_hyp(offset.x, mX);
+		rayDist_y = (angle == 0) ? 1e30 : cal_hyp(offset.y, mY);
+		wallHit = false;
+		while (wallHit == false)
+		{
+			// displacement along x-axis
+			if (rayDist_x < rayDist_y)
+			{
+				x2 = x1 + (offset.x * ray.dir.x);
+				y2 = y1 + (mX * offset.x * ray.dir.y);
+				offset.x += CC;
+				if (isWall(x2, y2, ray, map))
+				{
+					wallHit = true;
+					side = 0;
+					rays[i].actualLength = rayDist_x;
+				}
+				rayDist_x = cal_hyp(offset.x, mX);
+			}
+			else
+			{
+				// displacement along y-axis
+				x2 = x1 + (mY * offset.y * ray.dir.x);
+				y2 = y1 + (offset.y * ray.dir.y);
+				offset.y += CC;
+				if (isWall(x2, y2, ray, map))
+				{
+					wallHit = true;
+					side = 1;
+					rays[i].actualLength = rayDist_y;
+				}
+				rayDist_y = cal_hyp(offset.y, mY);
+			}
+		}
+
+		rays[i].end.x = x2;
+		rays[i].end.y = y2;
+		rays[i].color = (side == 0) ? 128 : 211;
+		SDL_RenderDrawLine(instance.renderer, rays[i].start.x, rays[i].start.y, rays[i].end.x, rays[i].end.y);
+	}
+}
+
+***/

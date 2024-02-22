@@ -16,9 +16,10 @@
 #define pH wH / 2   /* player height */
 #define mapW 24   /* map width */
 #define mapH 24   /* map height */
-#define FOV 66.0 / 800.0 /* Field of view */
+#define FOV 60.0 / 800.0 /* Field of view */
 /* distance from player to projection plane */
-#define Player_2_ProjP (SCREEN_WIDTH / 2) / tan(33 * (M_PI / 180))
+#define Player_2_ProjP (SCREEN_WIDTH / 2) / tan(30 * (M_PI / 180))
+#define speed 0.25
 
 
 /***** Global variables *****/
@@ -30,12 +31,15 @@ extern const int map[mapH][mapW];
 
 /* collision handling */
 void collision(Player *player);
+bool isWall(int x, int y, SDL_Point dir, const int map[mapH][mapW]);
+int HitWall(int x, int y, SDL_Point dir, const int map[mapH][mapW]);
 
 /* player handling */
 void setupPlayer(Player *player);
 void updatePlayer(Player *player);
-void move_player(SDL_Event e, Player *player);
+void movePlayer(SDL_Event e, Player *player);
 void moveCamera(SDL_Event e, Player *player);
+void moveCameraAndPlayer(SDL_Event e, Player *player);
 
 /* setup handling */
 Texture loadTextureFromFile(SDL_Instance instance, const char *path);
@@ -48,6 +52,7 @@ void cast_rays(SDL_Instance instance, Player player, Ray *rays, const int map[ma
 void castWall(SDL_Instance *instance, Ray *rays, Player player);
 void castFloor(SDL_Instance instance, Ray *rays);
 void castCeiling(SDL_Instance instance, Ray *rays);
+singleRay setupRay(float angle);
 
 /* initialization */
 int init_sdl(SDL_Instance *instance);
@@ -61,5 +66,7 @@ SDL_Point getDir(float angle);
 
 /* utility2 functions */
 float rad(float angle);
+SDL_Point get_Offset(singleRay ray, int x1, int y1);
+double cal_hyp(int dis, float slope);
 
 #endif

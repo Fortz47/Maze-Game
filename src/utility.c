@@ -86,7 +86,7 @@ SDL_Point getDir(float angle)
 		dir.x = (angle == 270) ? 0 : -1;
 		dir.y = -1;
 	}
-	else if (angle > 270 && angle < 360)
+	else if (angle > 270 && angle <= 360)
 	{
 		dir.x = 1;
 		dir.y = -1;

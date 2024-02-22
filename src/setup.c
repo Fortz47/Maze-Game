@@ -92,7 +92,7 @@ void draw_map(SDL_Instance instance)
 
 	SDL_RenderSetViewport(instance.renderer, &map_viwer);
 	SDL_SetRenderDrawBlendMode(instance.renderer, SDL_BLENDMODE_BLEND);
-	SDL_SetRenderDrawColor(instance.renderer, 0, 0, 255, 225);
+	SDL_SetRenderDrawColor(instance.renderer, 0, 0, 0, 60);
 	for (int i = 0; i < mapH; i++)
 	{
 		for (int j = 0; j < mapW; j++)

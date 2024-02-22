@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
 	{
 		SDL_Event event;
 		bool running = true;
-		Texture ptxt = loadTextureFromFile(instance, "../Surfaces/Game_arrow2.png");
+		Texture ptxt = loadTextureFromFile(instance, "./Surfaces/Game_arrow2.png");
 		Player player;
 		setupPlayer(&player);
 		Ray rays[NUM_RAYS];
@@ -20,9 +20,7 @@ int main(int argc, char *argv[])
 			while (SDL_PollEvent(&event) != 0)
 			{
 				Update_Status(event, &running);
-				moveCamera(event, &player);
-				move_player(event, &player);
-				/*collision(&player);*/
+				moveCameraAndPlayer(event, &player);
 			}
 
 			/* clear the screen */
@@ -53,7 +51,7 @@ int main(int argc, char *argv[])
 
 			/* cast rays */
 			SDL_SetRenderDrawBlendMode(instance.renderer, SDL_BLENDMODE_BLEND);
-			SDL_SetRenderDrawColor(instance.renderer, 255, 0, 0, 100);
+			SDL_SetRenderDrawColor(instance.renderer, 255, 255, 255, 10);
 			cast_rays(instance, player, rays, map);
 
 			/* Update the screen */

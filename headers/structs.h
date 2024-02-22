@@ -59,12 +59,33 @@ typedef struct Ray
 	int color;
 } Ray;
 
-typedef struct
+/**
+ * struct Texture - Struct for texture
+ * @texture: SDL texture
+ * @w: width of texture
+ * @h: height of texture
+ */
+typedef struct Texture
 {
 	SDL_Texture *texture;
 	int w;
 	int h;
 } Texture;
+
+/**
+ * struct singleRay - Struct for raycasting
+ * @radDir: ray direction
+ * @angle: ray angle
+ * @alpha: angle inclination to x-axis
+ * @beta: angle inclination to y-axis
+ */
+typedef struct singleRay
+{
+	SDL_Point dir;
+	float angle; /*ray angle*/
+	float alpha; /*angle inclination to x-axis*/
+	float beta; /*angle inclination to y-axis*/
+} singleRay;
 
 
 #endif
