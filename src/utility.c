@@ -69,7 +69,7 @@ int invert(int n)
  */
 SDL_Point getDir(float angle)
 {
-	SDL_Point dir;
+	SDL_Point dir = {0, 0};
 
 	if (angle >= 0 && angle <= 90)
 	{
@@ -92,5 +92,5 @@ SDL_Point getDir(float angle)
 		dir.y = -1;
 	}
 
-	return dir;
+	return (dir);
 }

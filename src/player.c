@@ -207,7 +207,7 @@ void moveCamera(SDL_Event e, Player *player)
 		if (player->angle > 355)
 			player->angle = 0;
 	}
-
+	
 	/**
 	if (e.key.keysym.sym == SDLK_LEFT)
 	{
@@ -233,6 +233,6 @@ void moveCamera(SDL_Event e, Player *player)
  */
 void moveCameraAndPlayer(SDL_Event e, Player *player)
 {
-	movePlayer(e, player);
 	moveCamera(e, player);
+	movePlayer(e, player);
 }

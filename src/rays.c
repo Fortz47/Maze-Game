@@ -21,7 +21,7 @@ void cast_rays(SDL_Instance instance, Player player, Ray *rays, const int map[ma
 	SDL_Point Y_quad = {0, 0};
 	SDL_Point end = {0, 0};
 
-	for (i = 0; i <= NUM_RAYS; i++)
+	for (i = 0; i < NUM_RAYS; i++)
 	{
 		angle = player.angle - 30 + (FOV * i);
 		if (angle < 0)
@@ -162,6 +162,7 @@ void cast_rays(SDL_Instance instance, Player player, Ray *rays, const int map[ma
 			rays[i].end.y = X_quad.y;
 			rays[i].actualLength = kx;
 			rays[i].color = 128;
+			rays[i].side = 1;
 		}
 		else if (wallHitY && !wallHitX)
 		{
@@ -169,6 +170,7 @@ void cast_rays(SDL_Instance instance, Player player, Ray *rays, const int map[ma
 			rays[i].end.y = Y_quad.y;
 			rays[i].actualLength = ky;
 			rays[i].color = 211;
+			rays[i].side = 0;
 		}
 		else
 		{
@@ -176,6 +178,7 @@ void cast_rays(SDL_Instance instance, Player player, Ray *rays, const int map[ma
 			rays[i].end.y = end.y;
 			rays[i].actualLength = k;
 			rays[i].color = (kx < ky) ? 128 : 211;
+			rays[i].side = (kx < ky) ? 1 : 0;
 		}
 		SDL_RenderDrawLine(instance.renderer, rays[i].start.x, rays[i].start.y, rays[i].end.x, rays[i].end.y);
 	}

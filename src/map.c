@@ -1,9 +1,8 @@
 #include "../headers/maze.h"
 
-
 /* 0 for no walls
-* > 0 for walls
-*/
+ * > 0 for walls
+ */
 const int map[mapW][mapH] =
 	{
 		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -30,3 +29,11 @@ const int map[mapW][mapH] =
 		{1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
+
+
+const char *array[TOTAL] =
+	{
+		"./Surfaces/wood.png",
+		"./Surfaces/colorstone.png",
+		"./Surfaces/greystone.png",
+		"./Surfaces/eagle.png"};

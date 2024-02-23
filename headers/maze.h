@@ -11,21 +11,22 @@
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 #define NUM_RAYS 800
-#define CC 8   /* cell size */
-#define wH CC   /* wall height */
-#define pH wH / 2   /* player height */
-#define mapW 24   /* map width */
-#define mapH 24   /* map height */
+#define CC 64			 /* cell size */
+#define wH CC			 /* wall height */
+#define pH wH / 2		 /* player height */
+#define mapW 24			 /* map width */
+#define mapH 24			 /* map height */
 #define FOV 60.0 / 800.0 /* Field of view */
 /* distance from player to projection plane */
 #define Player_2_ProjP (SCREEN_WIDTH / 2) / tan(30 * (M_PI / 180))
 #define speed 0.25
 
-
 /***** Global variables *****/
 
 /* Map of the game */
 extern const int map[mapH][mapW];
+/* Textures of the game */
+extern const char *array[TOTAL];
 
 /***** Function prototypes by files *****/
 
@@ -43,9 +44,10 @@ void moveCameraAndPlayer(SDL_Event e, Player *player);
 
 /* setup handling */
 Texture loadTextureFromFile(SDL_Instance instance, const char *path);
-void Close(SDL_Instance *instance, Texture *texture);
+void Close(SDL_Instance *instance, Texture texture[TOTAL]);
 void Update_Status(SDL_Event e, bool *running);
 void draw_map(SDL_Instance instance);
+Texture *loadTextures(SDL_Instance instance, const char *arr[TOTAL]);
 
 /* rays handling */
 void cast_rays(SDL_Instance instance, Player player, Ray *rays, const int map[mapH][mapW]);
@@ -68,5 +70,10 @@ SDL_Point getDir(float angle);
 float rad(float angle);
 SDL_Point get_Offset(singleRay ray, int x1, int y1);
 double cal_hyp(int dis, float slope);
+textureMap getTextureMapping(Ray ray);
+
+/* texture handling */
+void mapTextureToWall(SDL_Instance instance, Ray *rays, Texture *texture);
+void mapTextureToFloor(SDL_Instance instance, Ray *rays, Texture *texture);
 
 #endif

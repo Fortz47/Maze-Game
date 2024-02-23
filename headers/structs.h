@@ -2,6 +2,15 @@
 #define STRUCTS_H
 #include "../headers/maze.h"
 
+enum texture
+{
+	WOOD,
+	COLORSTONE,
+	GREYSTONE,
+	EAGLE,
+	TOTAL,
+};
+
 /**
  * struct SDL_Instance - Struct for SDL window and renderer
  * @window: SDL window
@@ -57,6 +66,7 @@ typedef struct Ray
 	float ds_to_proj_wall_bottom;
 	float ds_to_plane;
 	int color;
+	int side; /* 0 for x, 1 for y */
 } Ray;
 
 /**
@@ -87,5 +97,10 @@ typedef struct singleRay
 	float beta; /*angle inclination to y-axis*/
 } singleRay;
 
+typedef struct textureMap
+{
+	SDL_Point pos; /* position of texture strip */
+	int side; /* side of wall, 0 for x, 1 for y */
+} textureMap;
 
 #endif

@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
 	{
 		SDL_Event event;
 		bool running = true;
-		Texture ptxt = loadTextureFromFile(instance, "./Surfaces/Game_arrow2.png");
+		Texture *ptxt = loadTextures(instance, array);
 		Player player;
 		setupPlayer(&player);
 		Ray rays[NUM_RAYS];
@@ -30,9 +30,11 @@ int main(int argc, char *argv[])
 			/* draw walls */
 			SDL_RenderSetViewport(instance.renderer, NULL);
 			castWall(&instance, rays, player);
+			mapTextureToWall(instance, rays, &ptxt[COLORSTONE]);
 
 			/* draw floor */
 			castFloor(instance, rays);
+			/*mapTextureToFloor(instance, rays, &ptxt[COLORSTONE]);*/
 
 			/* draw ceiling */
 			castCeiling(instance, rays);
@@ -58,7 +60,7 @@ int main(int argc, char *argv[])
 			SDL_RenderPresent(instance.renderer);
 		}
 		/* Cleanup */
-		Close(&instance, &ptxt);
+		Close(&instance, ptxt);
 	}
 
 	return 0;

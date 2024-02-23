@@ -51,3 +51,22 @@ double cal_hyp(int dis, float slope)
 	res = sqrt((opp * opp) + (adj * adj));
 	return (res);
 }
+
+/**
+ * getTextureMapping - get texture mapping
+ * @ray: singleRay structure
+ * 
+ * Return: textureMap structure
+*/
+textureMap getTextureMapping(Ray ray)
+{
+	textureMap txtMap = {0, 0, 0};
+
+	if (ray.side == 0)
+		txtMap.pos.x = ray.end.x % CC;
+	else
+		txtMap.pos.x = ray.end.y % CC;
+	txtMap.pos.y = 0;
+	txtMap.side = ray.side;
+	return (txtMap);
+}

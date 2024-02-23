@@ -9,9 +9,6 @@
 */
 Texture loadTextureFromFile(SDL_Instance instance, const char *path)
 {
-	/* Get rid of preexisting texture /*
-	/* free(); */
-
 	/* The final texture */
 	Texture newTexture;
 
@@ -39,9 +36,27 @@ Texture loadTextureFromFile(SDL_Instance instance, const char *path)
 
 		/* Get rid of old loaded surface */
 		SDL_FreeSurface(loadedSurface);
+		loadedSurface = NULL;
 	}
 
 	return newTexture;
+}
+
+/**
+ * loadTextures - load textures
+ * @instance: SDL_Instance structure
+ * @arr: array of paths to textures
+ * Return: array of textures
+*/
+Texture *loadTextures(SDL_Instance instance, const char **arr)
+{
+	Texture *ptxt = malloc(sizeof(Texture) * TOTAL);
+
+	for (int i = 0; i < TOTAL; i++)
+	{
+		ptxt[i] = loadTextureFromFile(instance, arr[i]);
+	}
+	return ptxt;
 }
 
 /**
@@ -51,11 +66,17 @@ Texture loadTextureFromFile(SDL_Instance instance, const char *path)
 */
 void Close(SDL_Instance *instance, Texture *texture)
 {
-	if (texture->texture != NULL)
+	int i;
+
+	for (i = 0; i < TOTAL; i++)
 	{
-		SDL_DestroyTexture(texture->texture);
-		texture->texture = NULL;
+		if (texture[i].texture != NULL)
+		{
+			SDL_DestroyTexture(texture[i].texture);
+			texture[i].texture = NULL;
+		}
 	}
+	free(texture);
 
 	SDL_DestroyRenderer(instance->renderer);
 	SDL_DestroyWindow(instance->window);
@@ -75,6 +96,11 @@ void Update_Status(SDL_Event e, bool *running)
 {
 	if (e.type == SDL_QUIT)
 		*running = false;
+	if (e.type == SDL_KEYDOWN)
+	{
+		if (e.key.keysym.sym == SDLK_ESCAPE)
+			*running = false;
+	}
 }
 
 /**
