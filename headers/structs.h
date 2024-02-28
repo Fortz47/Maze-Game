@@ -8,8 +8,17 @@ enum texture
 	COLORSTONE,
 	GREYSTONE,
 	EAGLE,
+	WOOD_ROOF,
+	STONE_FLOOR,
 	TOTAL,
 };
+
+typedef enum txtMap
+{
+	FLOOR,
+	WALL,
+	CEILING,
+} txtMap;
 
 /**
  * struct SDL_Instance - Struct for SDL window and renderer

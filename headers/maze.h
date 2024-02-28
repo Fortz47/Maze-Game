@@ -20,6 +20,8 @@
 /* distance from player to projection plane */
 #define Player_2_ProjP (SCREEN_WIDTH / 2) / tan(30 * (M_PI / 180))
 #define speed 0.25
+#define FPS 30
+#define TARGET_FRAME_TIME 1000 / FPS
 
 /***** Global variables *****/
 
@@ -27,6 +29,8 @@
 extern const int map[mapH][mapW];
 /* Textures of the game */
 extern const char *array[TOTAL];
+/* time */
+Uint32 previous_time, current_time, elapsed_time;
 
 /***** Function prototypes by files *****/
 
@@ -70,7 +74,7 @@ SDL_Point getDir(float angle);
 float rad(float angle);
 SDL_Point get_Offset(singleRay ray, int x1, int y1);
 double cal_hyp(int dis, float slope);
-textureMap getTextureMapping(Ray ray);
+textureMap getTextureMapping(Ray ray, txtMap txt);
 
 /* texture handling */
 void mapTextureToWall(SDL_Instance instance, Ray *rays, Texture *texture);

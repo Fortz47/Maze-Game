@@ -36,4 +36,6 @@ const char *array[TOTAL] =
 		"./Surfaces/wood.png",
 		"./Surfaces/colorstone.png",
 		"./Surfaces/greystone.png",
-		"./Surfaces/eagle.png"};
+		"./Surfaces/eagle.png",
+		"./Surfaces/wood_roof.png",
+		"./Surfaces/stone_floor.png"};

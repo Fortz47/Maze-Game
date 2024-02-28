@@ -3,23 +3,26 @@
 
 int main(int argc, char *argv[])
 {
-	/* Initialize SDL */
 	SDL_Instance instance;
+	SDL_Event event;
+	bool running = true;
+	Texture *ptxt;
+	Player player;
+	setupPlayer(&player);
+	Ray rays[NUM_RAYS];
+
+	/* Initialize SDL */
 	if (init_sdl(&instance) == 0)
 	{
-		SDL_Event event;
-		bool running = true;
-		Texture *ptxt = loadTextures(instance, array);
-		Player player;
-		setupPlayer(&player);
-		Ray rays[NUM_RAYS];
-
+		ptxt = loadTextures(instance, array);
 		/* Main loop */
 		while (running)
 		{
 			while (SDL_PollEvent(&event) != 0)
 			{
 				Update_Status(event, &running);
+				current_time = SDL_GetTicks();
+				previous_time = current_time;
 				moveCameraAndPlayer(event, &player);
 			}
 
@@ -34,7 +37,7 @@ int main(int argc, char *argv[])
 
 			/* draw floor */
 			castFloor(instance, rays);
-			/*mapTextureToFloor(instance, rays, &ptxt[COLORSTONE]);*/
+			/*mapTextureToFloor(instance, rays, &ptxt[STONE_FLOOR]);*/
 
 			/* draw ceiling */
 			castCeiling(instance, rays);

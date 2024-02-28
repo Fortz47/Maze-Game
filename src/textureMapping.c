@@ -17,7 +17,7 @@ void mapTextureToWall(SDL_Instance instance, Ray *rays, Texture *texture)
 	SDL_SetTextureAlphaMod(texture->texture, 200);
 	for (int i = 0; i < NUM_RAYS; i++)
 	{
-		txtMap = getTextureMapping(rays[i]);
+		txtMap = getTextureMapping(rays[i], WALL);
 		txt.x = txtMap.pos.x;
 		dst.x = i;
 		dst.y = rays[i].ds_to_proj_wall_top;
@@ -35,7 +35,7 @@ void mapTextureToWall(SDL_Instance instance, Ray *rays, Texture *texture)
 void mapTextureToFloor(SDL_Instance instance, Ray *rays, Texture *texture)
 {
 	SDL_Rect dst = {0, 0, 1, 1};
-	SDL_Rect txt = {0, 0, 1, CC};
+	SDL_Rect txt = {0, 0, 1, 0};
 	textureMap txtMap;
 
 	SDL_SetTextureBlendMode(texture->texture, SDL_BLENDMODE_BLEND);
@@ -43,11 +43,13 @@ void mapTextureToFloor(SDL_Instance instance, Ray *rays, Texture *texture)
 	SDL_SetTextureAlphaMod(texture->texture, 200);
 	for (int i = 0; i < NUM_RAYS; i++)
 	{
-		txtMap = getTextureMapping(rays[i]);
+		txtMap = getTextureMapping(rays[i], FLOOR);
 		txt.x = txtMap.pos.x;
+		txt.y = rays[i].end.y;
 		dst.x = i;
 		dst.y = rays[i].ds_to_proj_wall_bottom;
 		dst.h = SCREEN_HEIGHT - rays[i].ds_to_proj_wall_bottom;
+		txt.h = dst.h;
 		SDL_RenderCopy(instance.renderer, texture->texture, &txt, &dst);
 	}
 }

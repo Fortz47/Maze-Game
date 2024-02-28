@@ -55,17 +55,23 @@ double cal_hyp(int dis, float slope)
 /**
  * getTextureMapping - get texture mapping
  * @ray: singleRay structure
+ * @txt: texture to map (WALL, FLOOR or CEILING)
  * 
  * Return: textureMap structure
 */
-textureMap getTextureMapping(Ray ray)
+textureMap getTextureMapping(Ray ray, txtMap txt)
 {
 	textureMap txtMap = {0, 0, 0};
 
-	if (ray.side == 0)
+	if (txt == WALL)
+	{
+		if (ray.side == 0)
+			txtMap.pos.x = ray.end.x % CC;
+		else
+			txtMap.pos.x = ray.end.y % CC;
+	}
+	else if (txt == FLOOR)
 		txtMap.pos.x = ray.end.x % CC;
-	else
-		txtMap.pos.x = ray.end.y % CC;
 	txtMap.pos.y = 0;
 	txtMap.side = ray.side;
 	return (txtMap);

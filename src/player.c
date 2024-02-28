@@ -65,61 +65,72 @@ void movePlayer(SDL_Event e, Player *player)
 	dir.x = player->dir.x;
 	dir.y = player->dir.y;
 
-	if (state[SDL_SCANCODE_W])
+	if (state[SDL_SCANCODE_W] || state[SDL_SCANCODE_S]
+		|| state[SDL_SCANCODE_A] || state[SDL_SCANCODE_D])
 	{
-		y = player->pos.y;
-		x = player->pos.x;
-		player->pos.y += (k * _absf(sin(rad(angle))) * dir.y);
-		player->pos.x += (k * _absf(cos(rad(angle))) * dir.x);
-		if (HitWall(player->pos.x, player->pos.y, dir, map))
+		current_time = SDL_GetTicks();
+		elapsed_time = current_time - previous_time;
+		previous_time = current_time;
+		if (elapsed_time < FPS)
+			SDL_Delay(FPS - elapsed_time);
+
+		if (state[SDL_SCANCODE_W])
 		{
-			player->pos.y = y;
-			player->pos.x = x;
+			y = player->pos.y;
+			x = player->pos.x;
+			player->pos.y += (k * _absf(sin(rad(angle))) * dir.y);
+			player->pos.x += (k * _absf(cos(rad(angle))) * dir.x);
+			if (HitWall(player->pos.x, player->pos.y, dir, map))
+			{
+				player->pos.y = y;
+				player->pos.x = x;
+			}
 		}
-	}
-	else if (state[SDL_SCANCODE_S])
-	{
-		y = player->pos.y;
-		x = player->pos.x;
-		player->pos.y += (k * _absf(sin(rad(angle))) * invert(dir.y));
-		player->pos.x += (k * _absf(cos(rad(angle))) * invert(dir.x));
-		if (HitWall(player->pos.x, player->pos.y, dir, map))
+		else if (state[SDL_SCANCODE_S])
 		{
-			player->pos.y = y;
-			player->pos.x = x;
+			y = player->pos.y;
+			x = player->pos.x;
+			player->pos.y += (k * _absf(sin(rad(angle))) * invert(dir.y));
+			player->pos.x += (k * _absf(cos(rad(angle))) * invert(dir.x));
+			if (HitWall(player->pos.x, player->pos.y, dir, map))
+			{
+				player->pos.y = y;
+				player->pos.x = x;
+			}
 		}
-	}
-	else if (state[SDL_SCANCODE_D])
-	{
-		angle += 90;
-		if (angle > 360)
-			angle -= 360;
-		dir = getDir(angle);
-		y = player->pos.y;
-		x = player->pos.x;
-		player->pos.x += (_absf(cos(rad(angle))) * k) * dir.x;
-		player->pos.y += (_absf(sin(rad(angle))) * k) * dir.y;
-		if (HitWall(player->pos.x, player->pos.y, dir, map))
+		else if (state[SDL_SCANCODE_D])
 		{
-			player->pos.y = y;
-			player->pos.x = x;
+			angle += 90;
+			if (angle > 360)
+				angle -= 360;
+			dir = getDir(angle);
+			y = player->pos.y;
+			x = player->pos.x;
+			player->pos.x += (_absf(cos(rad(angle))) * k) * dir.x;
+			player->pos.y += (_absf(sin(rad(angle))) * k) * dir.y;
+			if (HitWall(player->pos.x, player->pos.y, dir, map))
+			{
+				player->pos.y = y;
+				player->pos.x = x;
+			}
 		}
-	}
-	else if (state[SDL_SCANCODE_A])
-	{
-		angle -= 90;
-		if (angle < 0)
-			angle += 360;
-		dir = getDir(angle);
-		y = player->pos.y;
-		x = player->pos.x;
-		player->pos.x += (_absf(cos(rad(angle))) * k) * dir.x;
-		player->pos.y += (_absf(sin(rad(angle))) * k) * dir.y;
-		if (HitWall(player->pos.x, player->pos.y, dir, map))
+		else if (state[SDL_SCANCODE_A])
 		{
-			player->pos.y = y;
-			player->pos.x = x;
+			angle -= 90;
+			if (angle < 0)
+				angle += 360;
+			dir = getDir(angle);
+			y = player->pos.y;
+			x = player->pos.x;
+			player->pos.x += (_absf(cos(rad(angle))) * k) * dir.x;
+			player->pos.y += (_absf(sin(rad(angle))) * k) * dir.y;
+			if (HitWall(player->pos.x, player->pos.y, dir, map))
+			{
+				player->pos.y = y;
+				player->pos.x = x;
+			}
 		}
+			
 	}
 
 	/**
@@ -185,6 +196,7 @@ void movePlayer(SDL_Event e, Player *player)
 	**/
 }
 
+
 /**
  * moveCamera - move camera
  * @e: SDL_Event structure
@@ -195,19 +207,28 @@ void moveCamera(SDL_Event e, Player *player)
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 	updatePlayer(player);
 
-	if (state[SDL_SCANCODE_LEFT])
+	if (state[SDL_SCANCODE_LEFT] || state[SDL_SCANCODE_RIGHT])
 	{
-		player->angle -= 5;
-		if (player->angle < 0)
-			player->angle = 355;
+		current_time = SDL_GetTicks();
+		elapsed_time = current_time - previous_time;
+		previous_time = current_time;
+		if (elapsed_time < FPS)
+			SDL_Delay(FPS - elapsed_time);
+
+		if (state[SDL_SCANCODE_LEFT])
+		{
+			player->angle -= 5;
+			if (player->angle < 0)
+				player->angle = 355;
+		}
+		else if (state[SDL_SCANCODE_RIGHT])
+		{
+			player->angle += 5;
+			if (player->angle > 355)
+				player->angle = 0;
+		}
 	}
-	else if (state[SDL_SCANCODE_RIGHT])
-	{
-		player->angle += 5;
-		if (player->angle > 355)
-			player->angle = 0;
-	}
-	
+
 	/**
 	if (e.key.keysym.sym == SDLK_LEFT)
 	{
